@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, FindOneOptions, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import { DeleteResult, FindOneOptions, Repository, UpdateResult } from 'typeorm';
 import { OutPutSkillsFindsDto } from '../dtos/out-put/out-put-skills-finds.dto';
 import { PostSkillDto } from '../dtos/post-skill/post-skill.dto';
 import { UpdateSkillDto } from '../dtos/update-skill/update-skill.dto';
@@ -15,25 +15,24 @@ export class SkillsRepository implements SkillsRepositoryAbstract {
 	) {}
 
 	async findAll(): Promise<OutPutSkillsFindsDto[]> {
-		const skillsQueryBuilder = this.createSkillsWithGroupSkillQueryBuilder();
-		return await skillsQueryBuilder.getMany();
+		return await this.skillsRepository.find({
+			relations: ['groupSkill'],
+		});
 	}
 
 	async findOne(criteria: FindOneOptions<SkillsEntity>): Promise<OutPutSkillsFindsDto | null> {
-		const skillsQueryBuilder = this.createSkillsWithGroupSkillQueryBuilder();
 		const where = criteria.where;
+		const findById =
+			where && typeof where === 'object' && !Array.isArray(where) && 'id' in where && where.id;
 
-		if (where && typeof where === 'object' && !Array.isArray(where)) {
-			if ('id' in where && where.id) {
-				skillsQueryBuilder.where('skill.id = :id', { id: where.id });
-			}
-
-			if ('name' in where && where.name) {
-				skillsQueryBuilder.where('skill.name = :name', { name: where.name });
-			}
+		if (findById) {
+			return await this.skillsRepository.findOne({
+				...criteria,
+				relations: ['groupSkill'],
+			});
 		}
 
-		return await skillsQueryBuilder.getOne();
+		return await this.skillsRepository.findOne(criteria);
 	}
 
 	async create(postSkillDto: PostSkillDto): Promise<SkillsEntity> {
@@ -50,18 +49,5 @@ export class SkillsRepository implements SkillsRepositoryAbstract {
 
 	async save(entity: SkillsEntity): Promise<SkillsEntity> {
 		return await this.skillsRepository.save(entity);
-	}
-
-	private createSkillsWithGroupSkillQueryBuilder(): SelectQueryBuilder<SkillsEntity> {
-		const skillsQueryBuilder = this.skillsRepository.createQueryBuilder('skill');
-		skillsQueryBuilder.leftJoinAndSelect('skill.groupSkill', 'groupSkill');
-		skillsQueryBuilder.select([
-			'skill.id',
-			'skill.name',
-			'skill.groupSkillId',
-			'groupSkill.id',
-			'groupSkill.name',
-		]);
-		return skillsQueryBuilder;
 	}
 }

@@ -1,7 +1,7 @@
 import { SkillsEntity } from '@/modules/skills/entities/skills.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import { DeleteResult, FindOneOptions, Repository, UpdateResult } from 'typeorm';
 import { OutPutGroupsSkillsFindsDto } from '../dtos/out-put/out-put-groups-skills-finds.dto';
 import { PostGroupsSkillDto } from '../dtos/post-groups-skill/post-groups-skill.dto';
 import { GroupsSkillsEntity } from '../entities/groups-skills.entity';
@@ -17,22 +17,24 @@ export class GroupsSkillsRepository implements GroupsSkillsRepositoryAbstract {
 	) {}
 
 	async findAll(): Promise<OutPutGroupsSkillsFindsDto[]> {
-		const groupsSkillsQueryBuilder = this.createGroupsSkillsWithSkillsQueryBuilder();
-		return await groupsSkillsQueryBuilder.getMany();
+		return await this.groupsSkillsRepository.find({
+			relations: ['skills'],
+		});
 	}
 
-	async findOne(id: string): Promise<OutPutGroupsSkillsFindsDto | null> {
-		const groupsSkillsQueryBuilder = this.createGroupsSkillsWithSkillsQueryBuilder();
-		groupsSkillsQueryBuilder.where('groupSkill.id = :id', { id });
-		return await groupsSkillsQueryBuilder.getOne();
-	}
+	async findOne(criteria: FindOneOptions<GroupsSkillsEntity>): Promise<OutPutGroupsSkillsFindsDto | null> {
+		const where = criteria.where;
+		const findById =
+			where && typeof where === 'object' && !Array.isArray(where) && 'id' in where && where.id;
 
-	async findOneByName(name: string): Promise<OutPutGroupsSkillsFindsDto | null> {
-		return await this.groupsSkillsRepository
-			.createQueryBuilder('groupSkill')
-			.select(['groupSkill.id', 'groupSkill.name'])
-			.where('groupSkill.name = :name', { name })
-			.getOne();
+		if (findById) {
+			return await this.groupsSkillsRepository.findOne({
+				...criteria,
+				relations: ['skills'],
+			});
+		}
+
+		return await this.groupsSkillsRepository.findOne(criteria);
 	}
 
 	async create(postGroupsSkillDto: PostGroupsSkillDto): Promise<GroupsSkillsEntity> {
@@ -52,16 +54,8 @@ export class GroupsSkillsRepository implements GroupsSkillsRepositoryAbstract {
 	}
 
 	async countSkillsByGroupId(groupSkillId: string): Promise<number> {
-		return await this.skillsRepository
-			.createQueryBuilder('skill')
-			.where('skill.groupSkillId = :groupSkillId', { groupSkillId })
-			.getCount();
-	}
-
-	private createGroupsSkillsWithSkillsQueryBuilder(): SelectQueryBuilder<GroupsSkillsEntity> {
-		const groupsSkillsQueryBuilder = this.groupsSkillsRepository.createQueryBuilder('groupSkill');
-		groupsSkillsQueryBuilder.leftJoinAndSelect('groupSkill.skills', 'skills');
-		groupsSkillsQueryBuilder.select(['groupSkill.id', 'groupSkill.name', 'skills.id', 'skills.name']);
-		return groupsSkillsQueryBuilder;
+		return await this.skillsRepository.count({
+			where: { groupSkillId },
+		});
 	}
 }

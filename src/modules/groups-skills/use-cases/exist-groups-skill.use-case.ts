@@ -9,8 +9,7 @@ export class ExistGroupsSkillUseCase {
 	constructor(private readonly groupsSkillsRepository: GroupsSkillsRepositoryAbstract) {}
 
 	async execute(criteria: FindOneOptions<GroupsSkillsEntity>) {
-		const where = criteria.where as { name?: string };
-		const groupSkill = await this.groupsSkillsRepository.findOneByName(where.name!);
+		const groupSkill = await this.groupsSkillsRepository.findOne(criteria);
 
 		if (groupSkill) {
 			const whereClause = formatWhereClause(criteria.where || []);

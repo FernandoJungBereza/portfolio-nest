@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, FindOneOptions, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import { DeleteResult, FindOneOptions, Repository, UpdateResult } from 'typeorm';
 import { OutPutUserAuthDto } from '../dtos/out-put/out-put-user-auth.dto';
 import { OutPutUserFindsDto } from '../dtos/out-put/out-put-user-finds.dto';
 import { PostUserDto } from '../dtos/post-user/post-user.dto';
@@ -16,8 +16,9 @@ export class UserRepository implements UserRepositoryAbstract {
 	) {}
 
 	async findAll(): Promise<OutPutUserFindsDto[]> {
-		const userQueryBuilder = this.createUserQueryBuilder();
-		return await userQueryBuilder.getMany();
+		return await this.userRepository.find({
+			select: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
+		});
 	}
 
 	async findOne(criteria: FindOneOptions<UserEntity>): Promise<OutPutUserFindsDto | null> {
@@ -45,11 +46,5 @@ export class UserRepository implements UserRepositoryAbstract {
 
 	async save(entity: UserEntity): Promise<UserEntity> {
 		return await this.userRepository.save(entity);
-	}
-
-	private createUserQueryBuilder(): SelectQueryBuilder<UserEntity> {
-		const userQueryBuilder = this.userRepository.createQueryBuilder('user');
-		userQueryBuilder.select(['user.id', 'user.name', 'user.email', 'user.createdAt', 'user.updatedAt']);
-		return userQueryBuilder;
 	}
 }
