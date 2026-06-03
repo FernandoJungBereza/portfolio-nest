@@ -1,4 +1,4 @@
-import { PermissionUserEntity } from '@/modules/permission-user/entities/permission-user.entity';
+import { PermissionUserEntity } from '../entities/permission-user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

@@ -1,4 +1,4 @@
-import { PermissionUserEntity } from '@/modules/permission-user/entities/permission-user.entity';
+import { PermissionUserEntity } from './entities/permission-user.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PermissionsAuthorizationService } from './authorization/permissions-authorization.service';
