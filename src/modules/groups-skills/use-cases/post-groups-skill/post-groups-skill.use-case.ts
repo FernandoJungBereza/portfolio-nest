@@ -11,7 +11,11 @@ export class PostGroupsSkillUseCase {
 	) {}
 
 	async execute(postGroupsSkillDto: PostGroupsSkillDto): Promise<void> {
-		await this.existGroupsSkillUseCase.execute(postGroupsSkillDto.name);
+		await this.existGroupsSkillUseCase.execute({
+			where: {
+				name: postGroupsSkillDto.name,
+			},
+		});
 
 		const groupSkill = await this.groupsSkillsRepository.create({
 			...postGroupsSkillDto,

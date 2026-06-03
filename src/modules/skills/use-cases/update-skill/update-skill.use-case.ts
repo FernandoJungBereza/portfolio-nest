@@ -15,12 +15,24 @@ export class UpdateSkillUseCase {
 	) {}
 
 	async execute(id: string, updateSkillDto: UpdateSkillDto): Promise<void> {
-		const skill = await this.getExistingSkillUseCase.execute(id);
+		const skill = await this.getExistingSkillUseCase.execute({
+			where: {
+				id: id,
+			},
+		});
 
-		await this.getExistingGroupsSkillUseCase.execute(updateSkillDto.groupSkillId);
+		await this.getExistingGroupsSkillUseCase.execute({
+			where: {
+				id: updateSkillDto.groupSkillId,
+			},
+		});
 
 		if (updateSkillDto.name !== skill.name) {
-			await this.existSkillUseCase.execute(updateSkillDto.name);
+			await this.existSkillUseCase.execute({
+				where: {
+					name: updateSkillDto.name,
+				},
+			});
 		}
 
 		await this.skillsRepository.update(skill.id, {

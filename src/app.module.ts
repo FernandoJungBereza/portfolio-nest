@@ -4,6 +4,7 @@ import { EnvModule, EnvService } from './config/env';
 import { createTypeOrmConfig } from './config/typeorm.config';
 import { GroupsSkillsModule } from './modules/groups-skills/groups-skills.module';
 import { SkillsModule } from './modules/skills/skills.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
 	imports: [
@@ -13,6 +14,7 @@ import { SkillsModule } from './modules/skills/skills.module';
 			inject: [EnvService],
 			useFactory: createTypeOrmConfig,
 		}),
+		UserModule,
 		GroupsSkillsModule,
 		SkillsModule,
 	],

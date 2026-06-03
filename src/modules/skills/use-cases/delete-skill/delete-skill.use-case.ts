@@ -10,7 +10,11 @@ export class DeleteSkillUseCase {
 	) {}
 
 	async execute(id: string): Promise<void> {
-		const skill = await this.getExistingSkillUseCase.execute(id);
+		const skill = await this.getExistingSkillUseCase.execute({
+			where: {
+				id: id,
+			},
+		});
 
 		await this.skillsRepository.delete(skill.id);
 	}

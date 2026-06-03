@@ -7,6 +7,10 @@ export class GetOneGroupsSkillUseCase {
 	constructor(private readonly getExistingGroupsSkillUseCase: GetExistingGroupsSkillUseCase) {}
 
 	async execute(id: string): Promise<OutPutGroupsSkillsFindsDto> {
-		return this.getExistingGroupsSkillUseCase.execute(id);
+		return this.getExistingGroupsSkillUseCase.execute({
+			where: {
+				id: id,
+			},
+		});
 	}
 }

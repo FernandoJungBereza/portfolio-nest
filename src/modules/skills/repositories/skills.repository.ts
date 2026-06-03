@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
+import { DeleteResult, FindOneOptions, Repository, SelectQueryBuilder, UpdateResult } from 'typeorm';
 import { OutPutSkillsFindsDto } from '../dtos/out-put/out-put-skills-finds.dto';
 import { PostSkillDto } from '../dtos/post-skill/post-skill.dto';
 import { UpdateSkillDto } from '../dtos/update-skill/update-skill.dto';
@@ -19,18 +19,21 @@ export class SkillsRepository implements SkillsRepositoryAbstract {
 		return await skillsQueryBuilder.getMany();
 	}
 
-	async findOne(id: string): Promise<OutPutSkillsFindsDto | null> {
+	async findOne(criteria: FindOneOptions<SkillsEntity>): Promise<OutPutSkillsFindsDto | null> {
 		const skillsQueryBuilder = this.createSkillsWithGroupSkillQueryBuilder();
-		skillsQueryBuilder.where('skill.id = :id', { id });
-		return await skillsQueryBuilder.getOne();
-	}
+		const where = criteria.where;
 
-	async findOneByName(name: string): Promise<OutPutSkillsFindsDto | null> {
-		return await this.skillsRepository
-			.createQueryBuilder('skill')
-			.select(['skill.id', 'skill.name', 'skill.groupSkillId'])
-			.where('skill.name = :name', { name })
-			.getOne();
+		if (where && typeof where === 'object' && !Array.isArray(where)) {
+			if ('id' in where && where.id) {
+				skillsQueryBuilder.where('skill.id = :id', { id: where.id });
+			}
+
+			if ('name' in where && where.name) {
+				skillsQueryBuilder.where('skill.name = :name', { name: where.name });
+			}
+		}
+
+		return await skillsQueryBuilder.getOne();
 	}
 
 	async create(postSkillDto: PostSkillDto): Promise<SkillsEntity> {

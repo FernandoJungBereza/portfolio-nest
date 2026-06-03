@@ -10,7 +10,11 @@ export class DeleteGroupsSkillUseCase {
 	) {}
 
 	async execute(id: string): Promise<void> {
-		const groupSkill = await this.getExistingGroupsSkillUseCase.execute(id);
+		const groupSkill = await this.getExistingGroupsSkillUseCase.execute({
+			where: {
+				id: id,
+			},
+		});
 
 		const skillsCount = await this.groupsSkillsRepository.countSkillsByGroupId(groupSkill.id);
 
