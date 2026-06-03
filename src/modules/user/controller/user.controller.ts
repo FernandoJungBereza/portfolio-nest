@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RequireAdmin } from '@/modules/permissions/decorators/require-permission.decorator';
 import {
 	ApiCreatedResponse,
 	ApiDeletedResponse,
@@ -17,6 +18,7 @@ import { PostUserUseCase } from '../use-cases/post-user/post-user.use-case';
 import { UpdateUserUseCase } from '../use-cases/update-user/update-user.use-case';
 
 @ApiTags('Users')
+@RequireAdmin()
 @Controller('users')
 export class UserController {
 	constructor(

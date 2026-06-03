@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
+import { Public } from '../decorator/public.decorator';
 import { LoginDto } from '../dtos/login/login.dto';
 import { RefreshTokenDto } from '../dtos/refresh-token/refresh-token.dto';
 import type { AuthenticatedRequest } from '../interfaces/authenticated-request.interface';
@@ -18,6 +19,7 @@ export class AuthController {
 	) {}
 
 	@Post('login')
+	@Public()
 	@ApiOperation({ summary: 'Login the user' })
 	@ApiResponse({ status: 200, description: 'User logged in' })
 	@ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -38,6 +40,7 @@ export class AuthController {
 	}
 
 	@Post('refresh-token')
+	@Public()
 	@ApiOperation({ summary: 'Refresh the user token' })
 	@ApiResponse({ status: 200, description: 'User token refreshed' })
 	@ApiResponse({ status: 401, description: 'Unauthorized' })

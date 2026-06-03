@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RequireAdmin } from '@/modules/permissions/decorators/require-permission.decorator';
 import {
 	ApiCreatedResponse,
 	ApiDeletedResponse,
@@ -17,6 +18,7 @@ import { PostGroupsSkillUseCase } from '../use-cases/post-groups-skill/post-grou
 import { UpdateGroupsSkillUseCase } from '../use-cases/update-groups-skill/update-groups-skill.use-case';
 
 @ApiTags('Groups Skills')
+@RequireAdmin()
 @Controller('groups-skills')
 export class GroupsSkillsController {
 	constructor(
