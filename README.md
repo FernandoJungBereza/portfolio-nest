@@ -33,18 +33,13 @@ npm run start:dev
 - Swagger (dev): `http://localhost:3001/api`
 - pgAdmin: `http://localhost:8086` (admin@admin.com / admin123)
 
-## Seed a partir do front
+## Atualizar conteúdo (seed)
 
-Quando alterar os `consts` do `my-portfolio`:
+Edite `src/database/seeds/portfolio.default-payload.json` e rode:
 
 ```bash
-cd ../my-portfolio
-npx tsx scripts/export-to-portfolio-api.ts
-cd ../portfolio-nest
 npm run seed
 ```
-
-Isso regenera `src/database/seeds/portfolio.default-payload.json` com os dados atuais do front (projetos, skills, decorações do bento, etc.).
 
 ## Variáveis de ambiente
 
