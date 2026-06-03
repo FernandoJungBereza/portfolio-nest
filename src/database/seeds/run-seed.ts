@@ -1,9 +1,9 @@
+import { PortfolioContentEntity } from '@/modules/portfolio/entities/portfolio-content.entity';
+import type { PortfolioPayload } from '@/modules/portfolio/types/portfolio-payload.type';
 import 'dotenv/config';
 import { readFileSync } from 'fs';
 import path from 'path';
 import dataSource from '../typeorm.datasource';
-import { PortfolioContentEntity } from '@/modules/portfolio/entities/portfolio-content.entity';
-import type { PortfolioPayload } from '@/modules/portfolio/types/portfolio-payload.type';
 
 async function runSeed() {
 	await dataSource.initialize();
