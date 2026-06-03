@@ -55,6 +55,16 @@ export class EnvironmentVariables {
 	@IsOptional()
 	@IsString()
 	FRONTEND_URL?: string;
+
+	@Expose()
+	@IsString()
+	@IsNotEmpty()
+	JWT_SECRET: string;
+
+	@Expose()
+	@IsString()
+	@IsNotEmpty()
+	JWT_REFRESH_SECRET: string;
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvironmentVariables {

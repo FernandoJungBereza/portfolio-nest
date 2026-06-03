@@ -4,7 +4,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 
-import { GetExistingUserUseCase } from '../user/use-cases/get-existing-user.use-case';
 import { AuthController } from './controller/auth.controller';
 import { JwtGuard } from './guard/jwt-guard.guard';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
@@ -25,7 +24,6 @@ import { RefreshTokenUseCase } from './use-cases/refresh-token/refresh-token.use
 			}),
 		}),
 		UserModule,
-		GetExistingUserUseCase,
 	],
 	controllers: [AuthController],
 	providers: [LoginUseCase, LogoutUseCase, RefreshTokenUseCase, JwtStrategy, JwtGuard],
