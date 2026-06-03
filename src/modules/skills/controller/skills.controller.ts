@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OutPutSkillsFindsDto } from '../dtos/out-put/out-put-skills-finds.dto';
 import { PostSkillDto } from '../dtos/post-skill/post-skill.dto';
@@ -23,15 +23,6 @@ export class SkillsController {
 	@Get()
 	@ApiOperation({ summary: 'Get all skills' })
 	@ApiResponse({ status: 200, description: 'Skills found successfully' })
-	@ApiResponse({ status: 404, description: 'Skills not found' })
-	@ApiResponse({ status: 500, description: 'Internal server error' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	@ApiResponse({ status: 403, description: 'Forbidden' })
-	@ApiResponse({ status: 406, description: 'Not acceptable' })
-	@ApiResponse({ status: 409, description: 'Conflict' })
-	@ApiResponse({ status: 410, description: 'Gone' })
-	@ApiResponse({ status: 412, description: 'Precondition failed' })
 	async getAllSkills(): Promise<OutPutSkillsFindsDto[]> {
 		return this.getAllSkillsUseCase.execute();
 	}
@@ -40,15 +31,7 @@ export class SkillsController {
 	@ApiOperation({ summary: 'Get one skill' })
 	@ApiResponse({ status: 200, description: 'Skill found successfully' })
 	@ApiResponse({ status: 404, description: 'Skill not found' })
-	@ApiResponse({ status: 500, description: 'Internal server error' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	@ApiResponse({ status: 403, description: 'Forbidden' })
-	@ApiResponse({ status: 406, description: 'Not acceptable' })
-	@ApiResponse({ status: 409, description: 'Conflict' })
-	@ApiResponse({ status: 410, description: 'Gone' })
-	@ApiResponse({ status: 412, description: 'Precondition failed' })
-	async getOneSkill(id: string): Promise<OutPutSkillsFindsDto> {
+	async getOneSkill(@Param('id') id: string): Promise<OutPutSkillsFindsDto> {
 		return this.getOneSkillUseCase.execute(id);
 	}
 
@@ -56,13 +39,8 @@ export class SkillsController {
 	@ApiOperation({ summary: 'Create skill' })
 	@ApiResponse({ status: 201, description: 'Skill created successfully' })
 	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	@ApiResponse({ status: 403, description: 'Forbidden' })
-	@ApiResponse({ status: 406, description: 'Not acceptable' })
-	@ApiResponse({ status: 409, description: 'Conflict' })
-	@ApiResponse({ status: 410, description: 'Gone' })
-	@ApiResponse({ status: 412, description: 'Precondition failed' })
-	async postSkill(createSkillDto: PostSkillDto): Promise<void> {
+	@ApiResponse({ status: 404, description: 'Group skill not found' })
+	async postSkill(@Body() createSkillDto: PostSkillDto): Promise<void> {
 		return this.postSkillUseCase.execute(createSkillDto);
 	}
 
@@ -70,27 +48,16 @@ export class SkillsController {
 	@ApiOperation({ summary: 'Update skill' })
 	@ApiResponse({ status: 200, description: 'Skill updated successfully' })
 	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	@ApiResponse({ status: 403, description: 'Forbidden' })
-	@ApiResponse({ status: 406, description: 'Not acceptable' })
-	@ApiResponse({ status: 409, description: 'Conflict' })
-	@ApiResponse({ status: 410, description: 'Gone' })
-	@ApiResponse({ status: 412, description: 'Precondition failed' })
-	async updateSkill(id: string, updateSkillDto: UpdateSkillDto): Promise<void> {
+	@ApiResponse({ status: 404, description: 'Skill or group skill not found' })
+	async updateSkill(@Param('id') id: string, @Body() updateSkillDto: UpdateSkillDto): Promise<void> {
 		return this.updateSkillUseCase.execute(id, updateSkillDto);
 	}
 
 	@Delete(':id')
 	@ApiOperation({ summary: 'Delete skill' })
 	@ApiResponse({ status: 200, description: 'Skill deleted successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	@ApiResponse({ status: 403, description: 'Forbidden' })
-	@ApiResponse({ status: 406, description: 'Not acceptable' })
-	@ApiResponse({ status: 409, description: 'Conflict' })
-	@ApiResponse({ status: 410, description: 'Gone' })
-	@ApiResponse({ status: 412, description: 'Precondition failed' })
-	async deleteSkill(id: string): Promise<void> {
+	@ApiResponse({ status: 404, description: 'Skill not found' })
+	async deleteSkill(@Param('id') id: string): Promise<void> {
 		return this.deleteSkillUseCase.execute(id);
 	}
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 import { PostSkillInterface } from './post-skill.interface';
 
 export class PostSkillDto implements PostSkillInterface {
@@ -9,4 +9,9 @@ export class PostSkillDto implements PostSkillInterface {
 	@MaxLength(255)
 	@MinLength(2)
 	name: string;
+
+	@ApiProperty({ description: 'The id of the group skill' })
+	@IsUUID()
+	@IsNotEmpty()
+	groupSkillId: string;
 }

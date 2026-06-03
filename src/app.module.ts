@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvModule, EnvService } from './config/env';
 import { createTypeOrmConfig } from './config/typeorm.config';
-import { PortfolioModule } from './modules/portfolio/portfolio.module';
+import { GroupsSkillsModule } from './modules/groups-skills/groups-skills.module';
+import { SkillsModule } from './modules/skills/skills.module';
 
 @Module({
 	imports: [
@@ -12,7 +13,8 @@ import { PortfolioModule } from './modules/portfolio/portfolio.module';
 			inject: [EnvService],
 			useFactory: createTypeOrmConfig,
 		}),
-		PortfolioModule,
+		GroupsSkillsModule,
+		SkillsModule,
 	],
 })
 export class AppModule {}
