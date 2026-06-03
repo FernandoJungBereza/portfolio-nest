@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from '@/modules/auth/decorator/public.decorator';
 import { RequireAdmin } from '@/modules/permissions/decorators/require-permission.decorator';
 import {
 	ApiCreatedResponse,
@@ -8,6 +7,8 @@ import {
 	ApiStandardErrors,
 	ApiUpdatedResponse,
 } from '@/shared/decorators/swagger-standard-responses.decorator';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { OutPutGroupsSkillsFindsDto } from '../dtos/out-put/out-put-groups-skills-finds.dto';
 import { PostGroupsSkillDto } from '../dtos/post-groups-skill/post-groups-skill.dto';
 import { UpdateGroupsSkillDto } from '../dtos/update-groups-skill/update-groups-skill.dto';
@@ -30,14 +31,20 @@ export class GroupsSkillsController {
 	) {}
 
 	@Get()
+	@Public()
 	@ApiOperation({ summary: 'Get all groups skills' })
-	@ApiOkResponse({ description: 'Groups skills found successfully', type: OutPutGroupsSkillsFindsDto, isArray: true })
+	@ApiOkResponse({
+		description: 'Groups skills found successfully',
+		type: OutPutGroupsSkillsFindsDto,
+		isArray: true,
+	})
 	@ApiStandardErrors()
 	async getAllGroupsSkills(): Promise<OutPutGroupsSkillsFindsDto[]> {
 		return this.getAllGroupsSkillsUseCase.execute();
 	}
 
 	@Get(':id')
+	@Public()
 	@ApiOperation({ summary: 'Get one group skill' })
 	@ApiOkResponse({ description: 'Group skill found successfully', type: OutPutGroupsSkillsFindsDto })
 	@ApiStandardErrors()
@@ -46,6 +53,7 @@ export class GroupsSkillsController {
 	}
 
 	@Post()
+	@RequireAdmin()
 	@ApiOperation({ summary: 'Create group skill' })
 	@ApiCreatedResponse('Group skill created successfully')
 	@ApiStandardErrors()
@@ -54,6 +62,7 @@ export class GroupsSkillsController {
 	}
 
 	@Patch(':id')
+	@RequireAdmin()
 	@ApiOperation({ summary: 'Update group skill' })
 	@ApiUpdatedResponse('Group skill updated successfully')
 	@ApiStandardErrors()
@@ -65,6 +74,7 @@ export class GroupsSkillsController {
 	}
 
 	@Delete(':id')
+	@RequireAdmin()
 	@ApiOperation({ summary: 'Delete group skill' })
 	@ApiDeletedResponse('Group skill deleted successfully')
 	@ApiStandardErrors()

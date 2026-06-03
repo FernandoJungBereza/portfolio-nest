@@ -32,6 +32,7 @@ export class AuthController {
 	}
 
 	@Post('logout')
+	@Public()
 	@ApiOperation({ summary: 'Logout the current user' })
 	@ApiResponse({ status: 200, description: 'User logged out' })
 	@ApiResponse({ status: 401, description: 'Unauthorized' })
