@@ -2,7 +2,7 @@ import type { AuthenticatedRequest } from '@/modules/auth/interfaces/authenticat
 import { ApiOkResponse, ApiStandardErrors } from '@/shared/decorators/swagger-standard-responses.decorator';
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { OutPutUserFindsDto } from '../dtos/out-put/out-put-user-finds.dto';
+import { OutPutCurrentUserDto } from '../dtos/out-put/out-put-current-user.dto';
 import { GetCurrentUserUseCase } from '../use-cases/get-current-user/get-current-user.use-case';
 
 @Controller('users/me')
@@ -12,9 +12,9 @@ export class UsersCurrentController {
 
 	@Get()
 	@ApiOperation({ summary: 'Get current user' })
-	@ApiOkResponse({ description: 'Current user found successfully', type: OutPutUserFindsDto })
+	@ApiOkResponse({ description: 'Current user found successfully', type: OutPutCurrentUserDto })
 	@ApiStandardErrors()
-	async getCurrentUser(@Req() req: AuthenticatedRequest): Promise<OutPutUserFindsDto> {
+	async getCurrentUser(@Req() req: AuthenticatedRequest): Promise<OutPutCurrentUserDto> {
 		return this.getCurrentUserUseCase.execute(req.user.userId);
 	}
 }
