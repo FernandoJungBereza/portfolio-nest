@@ -6,6 +6,8 @@ export class PermissionsAuthorizationService {
 	constructor(private readonly permissionsRepository: PermissionsRepositoryAbstract) {}
 
 	async getPermissionNamesByUserId(userId: string): Promise<string[]> {
-		return this.permissionsRepository.findPermissionNamesByUserId(userId);
+		const permissions = await this.permissionsRepository.findPermissionsByUserId(userId);
+
+		return permissions.map((permission) => permission.name);
 	}
 }

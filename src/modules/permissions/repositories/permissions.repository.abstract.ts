@@ -4,7 +4,6 @@ import { PermissionUserEntity } from '../entities/permission-user.entity';
 import { PermissionsEntity } from '../entities/permissions.entity';
 
 export abstract class PermissionsRepositoryAbstract {
-	abstract findPermissionNamesByUserId(userId: string): Promise<string[]>;
 	abstract findPermissionsByUserId(userId: string): Promise<OutPutPermissionDto[]>;
 	abstract findOnePermission(criteria: FindOneOptions<PermissionsEntity>): Promise<OutPutPermissionDto | null>;
 	abstract findOnePermissionUser(criteria: FindOneOptions<PermissionUserEntity>): Promise<PermissionUserEntity | null>;

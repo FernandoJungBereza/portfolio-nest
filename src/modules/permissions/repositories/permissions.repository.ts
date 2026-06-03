@@ -15,29 +15,21 @@ export class PermissionsRepository implements PermissionsRepositoryAbstract {
 		private readonly permissionsRepository: Repository<PermissionsEntity>,
 	) {}
 
-	async findPermissionNamesByUserId(userId: string): Promise<string[]> {
-		const permissions = await this.findPermissionsByUserId(userId);
-
-		return permissions.map((permission) => permission.name);
-	}
-
 	async findPermissionsByUserId(userId: string): Promise<OutPutPermissionDto[]> {
 		const rows = await this.permissionUserRepository.find({
 			where: { userId },
 			relations: ['permission'],
 		});
 
-		return rows.map((row) => this.toOutput(row.permission));
+		return rows.map((row) => ({
+			id: row.permission.id,
+			name: row.permission.name,
+			description: row.permission.description,
+		}));
 	}
 
 	async findOnePermission(criteria: FindOneOptions<PermissionsEntity>): Promise<OutPutPermissionDto | null> {
-		const permission = await this.permissionsRepository.findOne(criteria);
-
-		if (!permission) {
-			return null;
-		}
-
-		return this.toOutput(permission);
+		return await this.permissionsRepository.findOne(criteria);
 	}
 
 	async findOnePermissionUser(criteria: FindOneOptions<PermissionUserEntity>): Promise<PermissionUserEntity | null> {
@@ -48,13 +40,5 @@ export class PermissionsRepository implements PermissionsRepositoryAbstract {
 		const permissionUser = this.permissionUserRepository.create({ userId, permissionId });
 
 		await this.permissionUserRepository.save(permissionUser);
-	}
-
-	private toOutput(permission: PermissionsEntity): OutPutPermissionDto {
-		return {
-			id: permission.id,
-			name: permission.name,
-			description: permission.description,
-		};
 	}
 }
