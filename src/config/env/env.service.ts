@@ -48,4 +48,12 @@ export class EnvService {
 	get isProduction(): boolean {
 		return this.nodeEnv === 'production';
 	}
+
+	get jwtSecret(): string {
+		return this.configService.getOrThrow<string>('JWT_SECRET');
+	}
+
+	get jwtRefreshSecret(): string {
+		return this.configService.getOrThrow<string>('JWT_REFRESH_SECRET');
+	}
 }
