@@ -1,5 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+	ApiCreatedResponse,
+	ApiDeletedResponse,
+	ApiOkResponse,
+	ApiStandardErrors,
+	ApiUpdatedResponse,
+} from '@/shared/decorators/swagger-standard-responses.decorator';
 import { OutPutGroupsSkillsFindsDto } from '../dtos/out-put/out-put-groups-skills-finds.dto';
 import { PostGroupsSkillDto } from '../dtos/post-groups-skill/post-groups-skill.dto';
 import { UpdateGroupsSkillDto } from '../dtos/update-groups-skill/update-groups-skill.dto';
@@ -22,32 +29,32 @@ export class GroupsSkillsController {
 
 	@Get()
 	@ApiOperation({ summary: 'Get all groups skills' })
-	@ApiResponse({ status: 200, description: 'Groups skills found successfully' })
+	@ApiOkResponse({ description: 'Groups skills found successfully', type: OutPutGroupsSkillsFindsDto, isArray: true })
+	@ApiStandardErrors()
 	async getAllGroupsSkills(): Promise<OutPutGroupsSkillsFindsDto[]> {
 		return this.getAllGroupsSkillsUseCase.execute();
 	}
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Get one group skill' })
-	@ApiResponse({ status: 200, description: 'Group skill found successfully' })
-	@ApiResponse({ status: 404, description: 'Group skill not found' })
+	@ApiOkResponse({ description: 'Group skill found successfully', type: OutPutGroupsSkillsFindsDto })
+	@ApiStandardErrors()
 	async getOneGroupsSkill(@Param('id') id: string): Promise<OutPutGroupsSkillsFindsDto> {
 		return this.getOneGroupsSkillUseCase.execute(id);
 	}
 
 	@Post()
 	@ApiOperation({ summary: 'Create group skill' })
-	@ApiResponse({ status: 201, description: 'Group skill created successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
+	@ApiCreatedResponse('Group skill created successfully')
+	@ApiStandardErrors()
 	async postGroupsSkill(@Body() createGroupsSkillDto: PostGroupsSkillDto): Promise<void> {
 		return this.postGroupsSkillUseCase.execute(createGroupsSkillDto);
 	}
 
 	@Patch(':id')
 	@ApiOperation({ summary: 'Update group skill' })
-	@ApiResponse({ status: 200, description: 'Group skill updated successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 404, description: 'Group skill not found' })
+	@ApiUpdatedResponse('Group skill updated successfully')
+	@ApiStandardErrors()
 	async updateGroupsSkill(
 		@Param('id') id: string,
 		@Body() updateGroupsSkillDto: UpdateGroupsSkillDto,
@@ -57,9 +64,8 @@ export class GroupsSkillsController {
 
 	@Delete(':id')
 	@ApiOperation({ summary: 'Delete group skill' })
-	@ApiResponse({ status: 200, description: 'Group skill deleted successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 404, description: 'Group skill not found' })
+	@ApiDeletedResponse('Group skill deleted successfully')
+	@ApiStandardErrors()
 	async deleteGroupsSkill(@Param('id') id: string): Promise<void> {
 		return this.deleteGroupsSkillUseCase.execute(id);
 	}

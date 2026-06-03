@@ -1,5 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+	ApiCreatedResponse,
+	ApiDeletedResponse,
+	ApiOkResponse,
+	ApiStandardErrors,
+	ApiUpdatedResponse,
+} from '@/shared/decorators/swagger-standard-responses.decorator';
 import { OutPutUserFindsDto } from '../dtos/out-put/out-put-user-finds.dto';
 import { PostUserDto } from '../dtos/post-user/post-user.dto';
 import { UpdateUserDto } from '../dtos/update-user/update-user.dto';
@@ -22,40 +29,40 @@ export class UserController {
 
 	@Get()
 	@ApiOperation({ summary: 'Get all users' })
-	@ApiResponse({ status: 200, description: 'Users found successfully' })
+	@ApiOkResponse({ description: 'Users found successfully', type: OutPutUserFindsDto, isArray: true })
+	@ApiStandardErrors()
 	async getAllUsers(): Promise<OutPutUserFindsDto[]> {
 		return this.getAllUsersUseCase.execute();
 	}
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Get one user' })
-	@ApiResponse({ status: 200, description: 'User found successfully' })
-	@ApiResponse({ status: 404, description: 'User not found' })
+	@ApiOkResponse({ description: 'User found successfully', type: OutPutUserFindsDto })
+	@ApiStandardErrors()
 	async getOneUser(@Param('id') id: string): Promise<OutPutUserFindsDto> {
 		return this.getOneUserUseCase.execute(id);
 	}
 
 	@Post()
 	@ApiOperation({ summary: 'Create user' })
-	@ApiResponse({ status: 201, description: 'User created successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
+	@ApiCreatedResponse('User created successfully')
+	@ApiStandardErrors()
 	async postUser(@Body() createUserDto: PostUserDto): Promise<void> {
 		return this.postUserUseCase.execute(createUserDto);
 	}
 
 	@Patch(':id')
 	@ApiOperation({ summary: 'Update user' })
-	@ApiResponse({ status: 200, description: 'User updated successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 404, description: 'User not found' })
+	@ApiUpdatedResponse('User updated successfully')
+	@ApiStandardErrors()
 	async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<void> {
 		return this.updateUserUseCase.execute(id, updateUserDto);
 	}
 
 	@Delete(':id')
 	@ApiOperation({ summary: 'Delete user' })
-	@ApiResponse({ status: 200, description: 'User deleted successfully' })
-	@ApiResponse({ status: 404, description: 'User not found' })
+	@ApiDeletedResponse('User deleted successfully')
+	@ApiStandardErrors()
 	async deleteUser(@Param('id') id: string): Promise<void> {
 		return this.deleteUserUseCase.execute(id);
 	}

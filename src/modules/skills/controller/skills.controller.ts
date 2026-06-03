@@ -1,5 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+	ApiCreatedResponse,
+	ApiDeletedResponse,
+	ApiOkResponse,
+	ApiStandardErrors,
+	ApiUpdatedResponse,
+} from '@/shared/decorators/swagger-standard-responses.decorator';
 import { OutPutSkillsFindsDto } from '../dtos/out-put/out-put-skills-finds.dto';
 import { PostSkillDto } from '../dtos/post-skill/post-skill.dto';
 import { UpdateSkillDto } from '../dtos/update-skill/update-skill.dto';
@@ -22,41 +29,40 @@ export class SkillsController {
 
 	@Get()
 	@ApiOperation({ summary: 'Get all skills' })
-	@ApiResponse({ status: 200, description: 'Skills found successfully' })
+	@ApiOkResponse({ description: 'Skills found successfully', type: OutPutSkillsFindsDto, isArray: true })
+	@ApiStandardErrors()
 	async getAllSkills(): Promise<OutPutSkillsFindsDto[]> {
 		return this.getAllSkillsUseCase.execute();
 	}
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Get one skill' })
-	@ApiResponse({ status: 200, description: 'Skill found successfully' })
-	@ApiResponse({ status: 404, description: 'Skill not found' })
+	@ApiOkResponse({ description: 'Skill found successfully', type: OutPutSkillsFindsDto })
+	@ApiStandardErrors()
 	async getOneSkill(@Param('id') id: string): Promise<OutPutSkillsFindsDto> {
 		return this.getOneSkillUseCase.execute(id);
 	}
 
 	@Post()
 	@ApiOperation({ summary: 'Create skill' })
-	@ApiResponse({ status: 201, description: 'Skill created successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 404, description: 'Group skill not found' })
+	@ApiCreatedResponse('Skill created successfully')
+	@ApiStandardErrors()
 	async postSkill(@Body() createSkillDto: PostSkillDto): Promise<void> {
 		return this.postSkillUseCase.execute(createSkillDto);
 	}
 
 	@Patch(':id')
 	@ApiOperation({ summary: 'Update skill' })
-	@ApiResponse({ status: 200, description: 'Skill updated successfully' })
-	@ApiResponse({ status: 400, description: 'Bad request' })
-	@ApiResponse({ status: 404, description: 'Skill or group skill not found' })
+	@ApiUpdatedResponse('Skill updated successfully')
+	@ApiStandardErrors()
 	async updateSkill(@Param('id') id: string, @Body() updateSkillDto: UpdateSkillDto): Promise<void> {
 		return this.updateSkillUseCase.execute(id, updateSkillDto);
 	}
 
 	@Delete(':id')
 	@ApiOperation({ summary: 'Delete skill' })
-	@ApiResponse({ status: 200, description: 'Skill deleted successfully' })
-	@ApiResponse({ status: 404, description: 'Skill not found' })
+	@ApiDeletedResponse('Skill deleted successfully')
+	@ApiStandardErrors()
 	async deleteSkill(@Param('id') id: string): Promise<void> {
 		return this.deleteSkillUseCase.execute(id);
 	}
