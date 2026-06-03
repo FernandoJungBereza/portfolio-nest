@@ -1,20 +1,17 @@
 import { RequireAdmin } from '@/modules/permissions/decorators/require-permission.decorator';
 import {
-	ApiCreatedResponse,
 	ApiDeletedResponse,
 	ApiOkResponse,
 	ApiStandardErrors,
 	ApiUpdatedResponse,
 } from '@/shared/decorators/swagger-standard-responses.decorator';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { OutPutUserFindsDto } from '../../dtos/out-put/out-put-user-finds.dto';
-import { PostUserDto } from '../../dtos/post-user/post-user.dto';
 import { UpdateUserDto } from '../../dtos/update-user/update-user.dto';
 import { DeleteUserUseCase } from '../../use-cases/delete-user/delete-user.use-case';
 import { GetAllUsersUseCase } from '../../use-cases/get-all-users/get-all-users.use-case';
 import { GetOneUserUseCase } from '../../use-cases/get-one-user/get-one-user.use-case';
-import { PostUserUseCase } from '../../use-cases/post-user/post-user.use-case';
 import { UpdateUserUseCase } from '../../use-cases/update-user/update-user.use-case';
 
 @Controller('admin/users')
@@ -24,7 +21,6 @@ export class UsersPrivateController {
 	constructor(
 		private readonly getAllUsersUseCase: GetAllUsersUseCase,
 		private readonly getOneUserUseCase: GetOneUserUseCase,
-		private readonly postUserUseCase: PostUserUseCase,
 		private readonly updateUserUseCase: UpdateUserUseCase,
 		private readonly deleteUserUseCase: DeleteUserUseCase,
 	) {}
@@ -43,14 +39,6 @@ export class UsersPrivateController {
 	@ApiStandardErrors()
 	async getOneUser(@Param('id') id: string): Promise<OutPutUserFindsDto> {
 		return this.getOneUserUseCase.execute(id);
-	}
-
-	@Post()
-	@ApiOperation({ summary: 'Create user' })
-	@ApiCreatedResponse('User created successfully')
-	@ApiStandardErrors()
-	async postUser(@Body() createUserDto: PostUserDto): Promise<void> {
-		return this.postUserUseCase.execute(createUserDto);
 	}
 
 	@Patch(':id')

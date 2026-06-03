@@ -2,8 +2,8 @@ import type { AuthenticatedRequest } from '@/modules/auth/interfaces/authenticat
 import { ApiOkResponse, ApiStandardErrors } from '@/shared/decorators/swagger-standard-responses.decorator';
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { OutPutUserFindsDto } from '../../dtos/out-put/out-put-user-finds.dto';
-import { GetCurrentUserUseCase } from '../../use-cases/get-current-user/get-current-user.use-case';
+import { OutPutUserFindsDto } from '../dtos/out-put/out-put-user-finds.dto';
+import { GetCurrentUserUseCase } from '../use-cases/get-current-user/get-current-user.use-case';
 
 @Controller('users/me')
 @ApiTags('Users')

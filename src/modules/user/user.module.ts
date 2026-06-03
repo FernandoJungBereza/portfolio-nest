@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersPrivateController } from './controller/private/users-private.controller';
-import { UsersCurrentController } from './controller/public/users-public.controller';
+import { UsersPublicController } from './controller/public/users-register.controller';
+import { UsersCurrentController } from './controller/users-current.controller';
 import { UserEntity } from './entities/user/user.entity';
 import { UserRepository } from './repositories/user.repository';
 import { UserRepositoryAbstract } from './repositories/user.repository.abstract';
@@ -16,7 +17,7 @@ import { UpdateUserUseCase } from './use-cases/update-user/update-user.use-case'
 
 @Module({
 	imports: [TypeOrmModule.forFeature([UserEntity])],
-	controllers: [UsersCurrentController, UsersPrivateController],
+	controllers: [UsersPublicController, UsersCurrentController, UsersPrivateController],
 	providers: [
 		PostUserUseCase,
 		GetAllUsersUseCase,
