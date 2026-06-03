@@ -1,5 +1,6 @@
 import { RequireAdmin } from '@/modules/permissions/decorators/require-permission.decorator';
 import {
+	ApiCreatedResponse,
 	ApiDeletedResponse,
 	ApiStandardErrors,
 	ApiUpdatedResponse,
@@ -24,7 +25,7 @@ export class SkillsPrivateController {
 
 	@Post('')
 	@ApiOperation({ summary: 'Create skill' })
-	@ApiDeletedResponse('Skill created successfully')
+	@ApiCreatedResponse('Skill created successfully')
 	@ApiStandardErrors()
 	async postSkill(@Body() createSkillDto: PostSkillDto): Promise<void> {
 		return this.postSkillUseCase.execute(createSkillDto);

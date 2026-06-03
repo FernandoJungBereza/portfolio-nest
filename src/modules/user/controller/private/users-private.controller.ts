@@ -1,5 +1,3 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RequireAdmin } from '@/modules/permissions/decorators/require-permission.decorator';
 import {
 	ApiCreatedResponse,
@@ -8,19 +6,21 @@ import {
 	ApiStandardErrors,
 	ApiUpdatedResponse,
 } from '@/shared/decorators/swagger-standard-responses.decorator';
-import { OutPutUserFindsDto } from '../dtos/out-put/out-put-user-finds.dto';
-import { PostUserDto } from '../dtos/post-user/post-user.dto';
-import { UpdateUserDto } from '../dtos/update-user/update-user.dto';
-import { DeleteUserUseCase } from '../use-cases/delete-user/delete-user.use-case';
-import { GetAllUsersUseCase } from '../use-cases/get-all-users/get-all-users.use-case';
-import { GetOneUserUseCase } from '../use-cases/get-one-user/get-one-user.use-case';
-import { PostUserUseCase } from '../use-cases/post-user/post-user.use-case';
-import { UpdateUserUseCase } from '../use-cases/update-user/update-user.use-case';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { OutPutUserFindsDto } from '../../dtos/out-put/out-put-user-finds.dto';
+import { PostUserDto } from '../../dtos/post-user/post-user.dto';
+import { UpdateUserDto } from '../../dtos/update-user/update-user.dto';
+import { DeleteUserUseCase } from '../../use-cases/delete-user/delete-user.use-case';
+import { GetAllUsersUseCase } from '../../use-cases/get-all-users/get-all-users.use-case';
+import { GetOneUserUseCase } from '../../use-cases/get-one-user/get-one-user.use-case';
+import { PostUserUseCase } from '../../use-cases/post-user/post-user.use-case';
+import { UpdateUserUseCase } from '../../use-cases/update-user/update-user.use-case';
 
+@Controller('admin/users')
 @ApiTags('Users')
 @RequireAdmin()
-@Controller('users')
-export class UserController {
+export class UsersPrivateController {
 	constructor(
 		private readonly getAllUsersUseCase: GetAllUsersUseCase,
 		private readonly getOneUserUseCase: GetOneUserUseCase,

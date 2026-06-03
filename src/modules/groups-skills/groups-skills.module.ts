@@ -1,7 +1,8 @@
 import { SkillsEntity } from '@/modules/skills/entities/skills.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GroupsSkillsController } from './controller/groups-skills.controller';
+import { GroupsSkillsPrivateController } from './controller/private/groups-skills-private.controller';
+import { GroupsSkillsPublicController } from './controller/public/groups-skills-public.controller';
 import { GroupsSkillsEntity } from './entities/groups-skills.entity';
 import { GroupsSkillsRepository } from './repositories/groups-skills.repository';
 import { GroupsSkillsRepositoryAbstract } from './repositories/groups-skills.repository.abstract';
@@ -15,7 +16,7 @@ import { UpdateGroupsSkillUseCase } from './use-cases/update-groups-skill/update
 
 @Module({
 	imports: [TypeOrmModule.forFeature([GroupsSkillsEntity, SkillsEntity])],
-	controllers: [GroupsSkillsController],
+	controllers: [GroupsSkillsPublicController, GroupsSkillsPrivateController],
 	providers: [
 		PostGroupsSkillUseCase,
 		GetAllGroupsSkillsUseCase,
