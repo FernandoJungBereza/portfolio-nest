@@ -18,8 +18,10 @@ export class LoginUseCase {
 		access_token: string;
 		refresh_token: string;
 	}> {
-		const user = await this.userRepository.findOne({
-			where: { email: loginDto.email },
+		const user = await this.userRepository.findOneForAuth({
+			where: {
+				email: loginDto.email,
+			},
 		});
 
 		if (!user) {
@@ -42,7 +44,7 @@ export class LoginUseCase {
 			refresh_token: this.jwtService.sign(
 				{ userId: user.id },
 				{
-					secret: this.env.jwtRefresh,
+					secret: this.env.jwtRefreshSecret,
 					expiresIn: '7d',
 				},
 			),
