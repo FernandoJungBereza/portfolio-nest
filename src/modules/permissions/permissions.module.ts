@@ -9,6 +9,7 @@ import { PermissionsGuard } from './guards/permissions.guard';
 import { PermissionsRepository } from './repositories/permissions.repository';
 import { PermissionsRepositoryAbstract } from './repositories/permissions.repository.abstract';
 import { AssignPermissionUseCase } from './use-cases/assign-permission/assign-permission.use-case';
+import { ExistPermissionUserUseCase } from './use-cases/exist-permission-user.use-case';
 import { GetExistingPermissionUseCase } from './use-cases/get-existing-permission.use-case';
 
 @Module({
@@ -18,6 +19,7 @@ import { GetExistingPermissionUseCase } from './use-cases/get-existing-permissio
 		PermissionsAuthorizationService,
 		PermissionsGuard,
 		GetExistingPermissionUseCase,
+		ExistPermissionUserUseCase,
 		AssignPermissionUseCase,
 		{
 			provide: PermissionsRepositoryAbstract,

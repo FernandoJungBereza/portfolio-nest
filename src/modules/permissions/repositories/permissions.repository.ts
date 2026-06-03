@@ -40,10 +40,8 @@ export class PermissionsRepository implements PermissionsRepositoryAbstract {
 		return this.toOutput(permission);
 	}
 
-	async isAssignedToUser(userId: string, permissionId: string): Promise<boolean> {
-		return this.permissionUserRepository.exists({
-			where: { userId, permissionId },
-		});
+	async findOnePermissionUser(criteria: FindOneOptions<PermissionUserEntity>): Promise<PermissionUserEntity | null> {
+		return this.permissionUserRepository.findOne(criteria);
 	}
 
 	async assignToUser(userId: string, permissionId: string): Promise<void> {
