@@ -33,7 +33,7 @@ export class UserRepository implements UserRepositoryAbstract {
 	}
 
 	async create(postUserDto: PostUserDto): Promise<UserEntity> {
-		return await this.userRepository.save(postUserDto);
+		return this.userRepository.create(postUserDto);
 	}
 
 	async update(id: string, updateUserDto: UpdateUserDto): Promise<UpdateResult> {
