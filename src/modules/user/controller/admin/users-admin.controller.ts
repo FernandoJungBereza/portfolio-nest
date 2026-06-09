@@ -17,7 +17,7 @@ import { UpdateUserUseCase } from '../../use-cases/update-user/update-user.use-c
 @Controller('admin/users')
 @ApiTags('Users')
 @RequireAdmin()
-export class UsersPrivateController {
+export class UsersAdminController {
 	constructor(
 		private readonly getAllUsersUseCase: GetAllUsersUseCase,
 		private readonly getOneUserUseCase: GetOneUserUseCase,

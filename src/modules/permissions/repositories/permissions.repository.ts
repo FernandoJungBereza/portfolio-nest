@@ -12,6 +12,18 @@ export class PermissionsRepository implements PermissionsRepositoryAbstract {
 		private readonly permissionsRepository: Repository<PermissionsEntity>,
 	) {}
 
+	async findAll(): Promise<OutPutPermissionDto[]> {
+		const permissions = await this.permissionsRepository.find({
+			order: { name: 'ASC' },
+		});
+
+		return permissions.map((permission) => ({
+			id: permission.id,
+			name: permission.name,
+			description: permission.description,
+		}));
+	}
+
 	async findOnePermission(criteria: FindOneOptions<PermissionsEntity>): Promise<OutPutPermissionDto | null> {
 		const permission = await this.permissionsRepository.findOne(criteria);
 
