@@ -1,7 +1,7 @@
+import { PermissionsEntity } from '@/modules/permissions/entities/permissions.entity';
 import { UserEntity } from '@/modules/user/entities/user/user.entity';
 import { TimestampedEntity } from '@/shared/entities/timestamped-entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { PermissionsEntity } from './permissions.entity';
 
 @Entity('permission_user')
 export class PermissionUserEntity extends TimestampedEntity {

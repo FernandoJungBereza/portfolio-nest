@@ -1,12 +1,12 @@
+import { PermissionUserRepositoryAbstract } from '@/modules/permission-user/repositories/permission-user.repository.abstract';
 import { Injectable } from '@nestjs/common';
-import { PermissionsRepositoryAbstract } from '../repositories/permissions.repository.abstract';
 
 @Injectable()
 export class PermissionsAuthorizationService {
-	constructor(private readonly permissionsRepository: PermissionsRepositoryAbstract) {}
+	constructor(private readonly permissionUserRepository: PermissionUserRepositoryAbstract) {}
 
 	async getPermissionNamesByUserId(userId: string): Promise<string[]> {
-		const permissions = await this.permissionsRepository.findPermissionsByUserId(userId);
+		const permissions = await this.permissionUserRepository.findPermissionsByUserId(userId);
 
 		return permissions.map((permission) => permission.name);
 	}

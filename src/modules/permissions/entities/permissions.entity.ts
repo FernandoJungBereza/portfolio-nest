@@ -1,4 +1,4 @@
-import { PermissionUserEntity } from './permission-user.entity';
+import { PermissionUserEntity } from '@/modules/permission-user/entities/permission-user.entity';
 import { TimestampedEntity } from '@/shared/entities/timestamped-entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
