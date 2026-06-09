@@ -1,6 +1,8 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { EnvService } from '@/config/env';
+import { setAuthCookies } from '@/modules/auth/helpers/auth-cookies.helper';
+import { Body, Controller, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import { Public } from '../decorator/public.decorator';
 import { LoginDto } from '../dtos/login/login.dto';
 import { RefreshTokenDto } from '../dtos/refresh-token/refresh-token.dto';
@@ -16,6 +18,7 @@ export class AuthController {
 		private readonly loginUseCase: LoginUseCase,
 		private readonly logoutUseCase: LogoutUseCase,
 		private readonly refreshTokenUseCase: RefreshTokenUseCase,
+		private readonly env: EnvService,
 	) {}
 
 	@Post('login')
@@ -23,16 +26,19 @@ export class AuthController {
 	@ApiOperation({ summary: 'Login the user' })
 	@ApiResponse({ status: 200, description: 'User logged in' })
 	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	async login(@Body() loginDto: LoginDto): Promise<{
-		user: { id: string; name: string; email: string };
-		access_token: string;
-		refresh_token: string;
-	}> {
-		return this.loginUseCase.execute(loginDto);
+	async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
+		const { user, access_token, refresh_token } = await this.loginUseCase.execute(loginDto);
+
+		setAuthCookies(res, access_token, refresh_token, { secure: this.env.isProduction });
+
+		return {
+			user,
+			access_token,
+			refresh_token,
+		};
 	}
 
 	@Post('logout')
-	@Public()
 	@ApiOperation({ summary: 'Logout the current user' })
 	@ApiResponse({ status: 200, description: 'User logged out' })
 	@ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -45,10 +51,21 @@ export class AuthController {
 	@ApiOperation({ summary: 'Refresh the user token' })
 	@ApiResponse({ status: 200, description: 'User token refreshed' })
 	@ApiResponse({ status: 401, description: 'Unauthorized' })
-	async refreshToken(@Body() refreshTokenDto: RefreshTokenDto): Promise<{
-		access_token: string;
-		refresh_token: string;
-	}> {
-		return this.refreshTokenUseCase.execute(refreshTokenDto.refreshToken);
+	async refreshToken(
+		@Req() req: Request,
+		@Body() refreshTokenDto: RefreshTokenDto,
+		@Res({ passthrough: true }) res: Response,
+	) {
+		const refreshToken = req.cookies?.refreshToken ?? refreshTokenDto.refreshToken;
+
+		if (!refreshToken) {
+			throw new UnauthorizedException('Refresh token not found');
+		}
+
+		const { access_token, refresh_token } = await this.refreshTokenUseCase.execute(refreshToken);
+
+		setAuthCookies(res, access_token, refresh_token, { secure: this.env.isProduction });
+
+		return { access_token, refresh_token };
 	}
 }

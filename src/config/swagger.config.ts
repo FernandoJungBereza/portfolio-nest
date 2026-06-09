@@ -9,12 +9,16 @@ export function setupSwagger(app: INestApplication, env: EnvService): void {
 		.setTitle('Portfolio Nest API')
 		.setDescription('API REST que alimenta o portfólio pessoal.')
 		.setVersion('1.0.0')
+		.addBearerAuth()
 		.build();
 
 	const document = SwaggerModule.createDocument(app, config);
 
 	SwaggerModule.setup('api', app, document, {
-		swaggerOptions: { persistAuthorization: true },
+		swaggerOptions: {
+			persistAuthorization: true,
+			withCredentials: true,
+		},
 		jsonDocumentUrl: 'api-json',
 	});
 }
